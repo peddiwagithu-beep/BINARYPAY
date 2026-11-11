@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Create account | HAKIM GLOBAL PAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/><link rel="stylesheet" href="/styles.css"/><link rel="icon" href="/logo.svg" type="image/svg+xml"/></head><body>
+<header class="site-header"><div class="container nav-shell">
+<a class="brand" href="/"><span class="brand-mark">H</span><span class="brand-text"><strong>HAKIM GLOBAL</strong><small>PAY</small></span></a>
+<nav class="main-nav" aria-label="Main"><a href="/about">About</a><a href="/docs">Developers</a><a href="/contact">Contact</a></nav>
+<div class="nav-actions"><a class="btn btn-secondary" href="/merchant/login">Merchant login</a><a class="btn btn-primary" href="/register">Create account</a></div></div></header>
+<main class="page-narrow"><section class="auth-panel"><h1>Create your merchant account</h1>
+<p>An administrator reviews every new account before payments can be collected.</p>
+<form class="auth-form" id="reg">
+<div class="field-grid"><label>Business name<input name="businessName" required minlength="2"/></label><label>Your full name<input name="fullName" required minlength="2"/></label></div>
+<div class="field-grid"><label>Email<input type="email" name="email" required autocomplete="email"/></label><label>Phone<input name="phone" required minlength="7" autocomplete="tel"/></label></div>
+<div class="field-grid"><label>Country<select name="country"><option value="KE">Kenya</option><option value="UG">Uganda</option><option value="TZ">Tanzania</option><option value="RW">Rwanda</option><option value="NG">Nigeria</option><option value="GH">Ghana</option><option value="ZA">South Africa</option><option value="GB">United Kingdom</option><option value="US">United States</option></select></label>
+<label>Business category<input name="category" required minlength="2" placeholder="e.g. Retail, Education"/></label></div>
+<label>Business registration number (optional)<input name="registrationNumber"/></label>
+<label>Password (10+ characters)<input type="password" name="password" required minlength="10" autocomplete="new-password"/></label>
+<div id="msg" role="alert"></div><button class="btn btn-primary full" type="submit">Create account</button></form></section></main>
+<script src="/api.js"></script><script src="/register.js"></script></body></html>

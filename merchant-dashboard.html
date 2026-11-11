@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Merchant dashboard | HAKIM GLOBAL PAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/><link rel="stylesheet" href="/styles.css"/><link rel="icon" href="/logo.svg" type="image/svg+xml"/></head>
+<body class="dashboard-page"><div class="app-shell"><aside class="sidebar"><div class="sidebar-brand"><a class="brand" href="/"><span class="brand-mark">H</span><span class="brand-text"><strong>HAKIM GLOBAL</strong><small>PAY</small></span></a></div>
+<nav class="side-nav" aria-label="Sections"><a href="#overview">Overview</a><a href="#collect">Collect payment</a><a href="#transactions">Transactions</a><a href="#links">Payment links</a><a href="#payouts">Payouts</a><a href="#keys">API keys</a><a href="#webhooks">Webhooks</a><a href="#usage">API activity</a></nav>
+<div class="sidebar-card"><small>Account status</small><strong id="m-status">Loading…</strong></div>
+<div class="sidebar-card"><small>Account reference (Paybill account number)</small><strong id="m-ref">…</strong></div>
+<div class="sidebar-card"><button class="btn btn-secondary small" id="logout">Sign out</button></div></aside>
+<main class="dashboard-main">
+<header class="dashboard-topbar"><div><h1 id="m-name">Dashboard</h1></div><div class="topbar-actions"><button class="btn btn-primary" id="refresh">Refresh</button></div></header>
+<div id="gate"></div>
+<section id="overview" class="stats-grid"></section>
+<section id="collect" class="box"><h2>Collect a payment</h2>
+<div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="mpesa">M-PESA</button><button role="tab" aria-selected="false" data-tab="bank">Bank transfer</button></div>
+<form id="f-mpesa"><label>Customer phone<input name="phone" inputmode="tel" placeholder="0712345678" required/></label><label>Amount (KES)<input name="amount" type="number" min="1" step="1" required/></label>
+<button class="btn btn-primary" type="submit">Send M-PESA prompt</button></form>
+<form id="f-bank" hidden><label>Amount<input name="amount" type="number" min="1" step="0.01" required/></label><label>Your reference (optional)<input name="merchantReference" maxlength="64"/></label>
+<button class="btn btn-primary" type="submit">Get bank details</button></form>
+<div id="collect-out" role="status"></div></section>
+<section id="transactions" class="box"><h2>Transactions</h2><div class="scroll-x" id="tx"></div></section>
+<section id="payouts" class="box"><h2>Payouts</h2><p class="empty">You can withdraw only settled funds. The amount plus any fee is held when you request, and returned if the request is rejected.</p>
+<form id="f-payout"><div class="field-grid"><label>Method<select name="method"><option value="mpesa">M-PESA</option><option value="bank">Bank transfer</option></select></label><label>Currency<select name="currency"><option>KES</option><option>USD</option><option>EUR</option><option>GBP</option></select></label></div>
+<label>Amount<input name="amount" type="number" min="1" step="0.01" required/></label>
+<label data-for="mpesa">M-PESA phone<input name="phone" inputmode="tel" placeholder="0712345678"/></label>
+<div data-for="bank" hidden><label>Bank name<input name="bankName" maxlength="80"/></label><label>Account name<input name="accountName" maxlength="80"/></label><label>Account number<input name="accountNumber" maxlength="40"/></label></div>
+<div id="fee-note" class="empty"></div><button class="btn btn-primary" type="submit">Request payout</button></form>
+<div id="payout-out" role="status"></div><div class="scroll-x" id="payouts-list"></div></section>
+<section id="links" class="box"><h2>Payment links</h2><p class="empty">Share a link and customers pay with M-PESA on a hosted page.</p>
+<form id="f-link"><label>What is it for?<input name="description" maxlength="200" placeholder="e.g. School fees, Order 1001"/></label><label>Amount in KES (leave empty to let the customer choose)<input name="amount" type="number" min="1" step="1"/></label><button class="btn btn-secondary" type="submit">Create payment link</button></form>
+<div id="link-out" role="status"></div><div class="scroll-x" id="links-list"></div></section>
+<section id="keys" class="box"><h2>API keys</h2><form id="f-key"><div class="field-grid"><label>Label<input name="label" maxlength="40" placeholder="Website"/></label><label>Environment<select name="environment"><option value="sandbox">Sandbox</option><option value="live">Live (needs verified business)</option></select></label></div><button class="btn btn-secondary" type="submit">Create key</button></form>
+<div id="key-out" role="status"></div><div class="scroll-x" id="keys-list"></div></section>
+<section id="webhooks" class="box"><h2>Webhooks</h2><p class="empty">We send a signed POST to your HTTPS URL when a payment or payout changes. See <a href="/docs">Developers</a> for how to verify the signature.</p>
+<form id="f-hook"><label>Endpoint URL<input name="url" type="url" placeholder="https://example.com/hgp-webhook" required/></label><button class="btn btn-secondary" type="submit">Add endpoint</button></form>
+<div id="hook-out" role="status"></div><div class="scroll-x" id="hooks-list"></div><h2>Recent deliveries</h2><div class="scroll-x" id="deliv-list"></div></section>
+<section id="usage" class="box"><h2>API activity</h2><p class="empty">Latest requests made with your API keys. Documentation is in <a href="/docs">Developers</a>.</p><div class="scroll-x" id="usage-list"></div></section>
+</main></div><script src="/api.js"></script><script src="/merchant.js"></script></body></html>

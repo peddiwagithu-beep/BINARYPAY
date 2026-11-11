@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Developers | HAKIM GLOBAL PAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/><link rel="stylesheet" href="/styles.css"/><link rel="icon" href="/logo.svg" type="image/svg+xml"/></head><body>
+<header class="site-header"><div class="container nav-shell"><a class="brand" href="/"><span class="brand-mark">H</span><span class="brand-text"><strong>HAKIM GLOBAL</strong><small>PAY</small></span></a>
+<nav class="main-nav" aria-label="Main"><a href="/about">About</a><a href="/docs">Developers</a><a href="/contact">Contact</a></nav>
+<div class="nav-actions"><a class="btn btn-secondary" href="/merchant/login">Merchant login</a><a class="btn btn-primary" href="/register">Create account</a></div></div></header>
+<main class="page-narrow doc"><h1>API reference</h1>
+<p>Create keys in your dashboard under API keys. Send the secret key as a Bearer token. Keep it on your server and never put it in a website or app. Secrets are shown once.</p>
+<pre>Authorization: Bearer hgp_sk_...</pre>
+<p>A key works only in the environment its server runs in: sandbox keys on a sandbox server, live keys on production. Live keys require verified business details.</p>
+<h2>Endpoints</h2>
+<pre>POST /api/v1/payments            start an M-PESA STK Push
+GET  /api/v1/payments/:id        check a payment
+GET  /api/v1/transactions        list payments (?limit=50&amp;offset=0)
+GET  /api/v1/balance             pending and settled balances
+POST /api/v1/payment-links       create a hosted payment link
+GET  /api/v1/payment-links       list your links</pre>
+<h2>Start a payment</h2>
+<p>Amounts are whole KES. Send an <code>Idempotency-Key</code> header so a retry never charges twice. The response is always <code>pending</code>. A payment becomes <code>succeeded</code> only after Safaricom confirms it, so poll <code>GET /api/v1/payments/:id</code>.</p>
+<pre>curl -X POST https://YOUR-DOMAIN/api/v1/payments \
+  -H "Authorization: Bearer $HGP_SECRET_KEY" \
+  -H "Idempotency-Key: order-1001" -H "Content-Type: application/json" \
+  -d '{"phone":"0712345678","amount":100,"reference":"order-1001"}'</pre>
+<h2>JavaScript</h2>
+<pre>const r = await fetch("https://YOUR-DOMAIN/api/v1/payments", {
+  method: "POST",
+  headers: { Authorization: `Bearer ${process.env.HGP_SECRET_KEY}`,
+             "Idempotency-Key": "order-1001", "Content-Type": "application/json" },
+  body: JSON.stringify({ phone: "0712345678", amount: 100 })
+});
+console.log(await r.json()); // { id, status: "pending" }</pre>
+<h2>PHP</h2>
+<pre>$ch = curl_init("https://YOUR-DOMAIN/api/v1/payments");
+curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => ["Authorization: Bearer " . getenv("HGP_SECRET_KEY"),
+    "Idempotency-Key: order-1001", "Content-Type: application/json"],
+  CURLOPT_POSTFIELDS => json_encode(["phone" => "0712345678", "amount" => 100])]);
+echo curl_exec($ch);</pre>
+<h2>Python</h2>
+<pre>import os, requests
+r = requests.post("https://YOUR-DOMAIN/api/v1/payments",
+  headers={"Authorization": "Bearer " + os.environ["HGP_SECRET_KEY"], "Idempotency-Key": "order-1001"},
+  json={"phone": "0712345678", "amount": 100})
+print(r.json())</pre>
+<h2>Errors</h2>
+<p><code>401 invalid_api_key</code> · <code>403 merchant_not_approved</code> · <code>403 environment_mismatch</code> · <code>400 validation</code> · <code>400 invalid_phone</code> · <code>503 provider_disabled</code> · <code>502 provider_error</code> · <code>429</code> too many requests (60 per minute per key).</p>
+<h2>Webhooks</h2>
+<p>Add an HTTPS endpoint in your dashboard under Webhooks. You get a signing secret (<code>whsec_...</code>) once. We POST JSON for these events: <code>payment.succeeded</code>, <code>payment.failed</code>, <code>payout.paid</code>, <code>payout.rejected</code> and <code>webhook.test</code>. Respond with any 2xx status within 8 seconds. Failed deliveries retry up to 6 times with growing delays, so the same event can arrive more than once: use the event <code>id</code> to ignore duplicates.</p>
+<pre>{ "id": "payment.succeeded:&lt;payment id&gt;", "type": "payment.succeeded", "created": "...",
+  "data": { "id": "...", "status": "succeeded", "amount_minor": 10000, "currency": "KES",
+            "reference": "order-1001", "receipt": "ABC123XYZ" } }</pre>
+<p>Verify every request. The <code>HGP-Signature</code> header looks like <code>t=1700000000,v1=&lt;hex&gt;</code>. Compute HMAC-SHA256 of <code>t + "." + rawBody</code> with your signing secret, compare in constant time, and reject if the timestamp is more than 5 minutes old. Use the raw request body, not re-serialised JSON.</p>
+<pre>// Node.js
+const crypto = require("crypto");
+function verify(raw, header, secret) {
+  const [t, v1] = header.split(",").map((p) =&gt; p.split("=")[1]);
+  const mac = crypto.createHmac("sha256", secret).update(t + "." + raw).digest("hex");
+  const ok = mac.length === v1.length &amp;&amp; crypto.timingSafeEqual(Buffer.from(mac), Buffer.from(v1));
+  return ok &amp;&amp; Math.abs(Date.now() / 1000 - Number(t)) &lt; 300;
+}</pre>
+<pre># Python
+import hmac, hashlib, time
+def verify(raw: bytes, header: str, secret: str) -&gt; bool:
+    t, v1 = [p.split("=")[1] for p in header.split(",")]
+    mac = hmac.new(secret.encode(), t.encode() + b"." + raw, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(mac, v1) and abs(time.time() - int(t)) &lt; 300</pre>
+<pre>// PHP
+function verify($raw, $header, $secret) {
+  [$t, $v1] = array_map(fn($p) =&gt; explode("=", $p)[1], explode(",", $header));
+  $mac = hash_hmac("sha256", $t . "." . $raw, $secret);
+  return hash_equals($mac, $v1) &amp;&amp; abs(time() - (int)$t) &lt; 300;
+}</pre>
+<h2>Payouts</h2>
+<p>Request payouts from the dashboard. Only settled funds can be withdrawn, and your business must have verified details. The amount plus fee is held at request. An administrator sends the money and records the reference, or rejects the request and the held funds are returned. You can read payouts with <code>GET /api/v1/payouts</code>. Starting payouts through the API is intentionally not available.</p>
+</main></body></html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="HAKIM GLOBAL PAY helps merchants collect, reconcile, and settle payments across M-PESA and global rails."
+    />
+    <title>HAKIM GLOBAL PAY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-shell">
+        <a class="brand" href="#top" aria-label="HAKIM GLOBAL PAY home">
+          <span class="brand-mark">H</span>
+          <span class="brand-text">
+            <strong>HAKIM GLOBAL</strong>
+            <small>PAY</small>
+          </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#platform">Platform</a>
+          <a href="#features">Features</a>
+          <a href="#security">Security</a>
+          <a href="/docs">Developers</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-secondary" href="/merchant/login">Merchant login</a>
+          <a class="btn btn-primary" href="/register">Create account</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">Built for modern global merchants</div>
+            <h1>Pay. Get paid. Grow.</h1>
+            <p class="lede">
+              HAKIM GLOBAL PAY gives merchants a secure, developer-friendly way to collect
+              payments, reconcile transactions, and manage settlements across Kenya and beyond.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="/register">Create free account</a>
+              <a class="btn btn-secondary" href="/merchant/login">Merchant portal</a>
+            </div>
+            <ul class="micro-points" aria-label="Key business benefits">
+              <li>Multi-currency settlement</li>
+              <li>Real-time reconciliation checks</li>
+              <li>Audit-ready admin controls</li>
+            </ul>
+          </div>
+
+          <div class="hero-panel" aria-label="How a payment works">
+            <div class="panel-content">
+              <div class="mini-card"><small>Step 1</small><strong>Customer pays</strong><span>M-PESA prompt or bank transfer</span></div>
+              <div class="mini-card"><small>Step 2</small><strong>We verify</strong><span>Callback or bank credit is checked against the amount</span></div>
+              <div class="mini-card"><small>Step 3</small><strong>You get paid</strong><span>Balance moves from pending to settled after settlement</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="logos-strip">
+        <div class="container logos-wrap">
+          <span>Payment methods</span>
+          <div class="logo-grid"><span>M-PESA STK Push</span><span>Bank transfer</span><span>Cards (via approved partners, coming)</span></div>
+        </div>
+      </section>
+
+      <section id="platform" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <div class="eyebrow">Platform</div>
+            <h2>One payment layer for collections, reconciliation, and settlement.</h2>
+          </div>
+          <div class="feature-grid" id="feature-grid"></div>
+        </div>
+      </section>
+
+      <section id="features" class="section alt-section">
+        <div class="container split-layout">
+          <div>
+            <div class="eyebrow">Why teams choose HAKIM</div>
+            <h2>Built for scale, with operational clarity at every step.</h2>
+            <ul class="check-list">
+              <li>Flexible merchant onboarding with KYC and approval workflows</li>
+              <li>Strong idempotency controls and callback deduplication</li>
+              <li>Audit logs and admin tools for exceptions and disputes</li>
+              <li>Developer-friendly APIs with predictable payment states</li>
+            </ul>
+          </div>
+
+          <div class="info-stack">
+            <div class="info-card accent-card">
+              <small>Collection flow</small>
+              <strong>STK push → pending → callback → success</strong>
+              <p>Only verified callbacks mark funds as settled, helping prevent double-crediting.</p>
+            </div>
+            <div class="info-card">
+              <small>Settlement view</small>
+              <strong>Pending balance vs. withdrawable balance</strong>
+              <p>Funds are credited to pending first, then moved to settled after settlement rules.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="security" class="section">
+        <div class="container">
+          <div class="section-heading narrow">
+            <div class="eyebrow">Security & compliance</div>
+            <h2>Protecting funds, data, and merchant trust.</h2>
+          </div>
+          <div class="security-grid">
+            <article class="security-card">
+              <div class="icon">01</div>
+              <h3>Secret path callbacks</h3>
+              <p>Callback verification is enforced with shared secrets and transaction matching.</p>
+            </article>
+            <article class="security-card">
+              <div class="icon">02</div>
+              <h3>Hash-only API secrets</h3>
+              <p>API credentials are stored with one-way hashing so only the secret is shown once.</p>
+            </article>
+            <article class="security-card">
+              <div class="icon">03</div>
+              <h3>Immutable audit trail</h3>
+              <p>Every create, revoke, approve, and provider action is recorded and reviewable.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      
+
+      <section id="contact" class="cta-band">
+        <div class="container cta-shell">
+          <div>
+            <div class="eyebrow">Ready to launch?</div>
+            <h2>Power your next payments workflow with HAKIM GLOBAL PAY.</h2>
+          </div>
+          <a class="btn btn-primary" href="/contact">Contact us</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-shell">
+        <div>
+          <a class="brand footer-brand" href="#top">
+            <span class="brand-mark">H</span>
+            <span class="brand-text">
+              <strong>HAKIM GLOBAL</strong>
+              <small>PAY</small>
+            </span>
+          </a>
+        </div>
+        <p>© <span id="year"></span> HAKIM GLOBAL PAY. A payment technology platform; not a bank. We do not hold customer funds unless the required authorisations and settlement arrangements are in place. <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/docs">Developers</a></p>
+      </div>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
