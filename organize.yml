@@ -1,0 +1,41 @@
+name: Organize repo
+# One-time helper: moves the flat uploaded files into src/, public/ and migrations/, checks the build, and commits.
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  organize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move files into folders
+        run: |
+          set -e
+          mkdir -p migrations public src/middleware src/providers src/routes src/scripts src/services
+          mv_to() { dest="$1"; shift; for f in "$@"; do [ -f "$f" ] && git mv "$f" "$dest/"; done; true; }
+          mv_to migrations 001_init.sql 002_mpesa.sql 003_bank.sql 004_webhooks_payouts.sql
+          mv_to public index.html about.html contact.html docs.html register.html verify-email.html merchant-login.html admin-login.html merchant-dashboard.html admin-dashboard.html pay.html app.js api.js login.js register.js verify.js merchant.js admin.js pay.js styles.css logo.svg
+          mv_to src server.ts db.ts
+          [ -f middleware-auth.ts ] && git mv middleware-auth.ts src/middleware/auth.ts
+          mv_to src/middleware apiKey.ts
+          mv_to src/providers bank.ts mpesa.ts types.ts
+          mv_to src/routes admin.ts auth.ts callbacks.ts collect.ts merchant.ts payouts.ts public.ts v1.ts
+          mv_to src/scripts migrate.ts seedAdmin.ts
+          mv_to src/services crypto.ts ledger.ts links.ts mail.ts payments.ts reconcile.ts webhooks.ts
+          [ -f dot-env.example ] && git mv dot-env.example .env.example
+          [ -f dot-gitignore ] && git mv dot-gitignore .gitignore
+          true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify the build
+        run: |
+          npm install --include=dev
+          npm run build
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Organize project into folders" || echo "Nothing to commit"
+          git push
