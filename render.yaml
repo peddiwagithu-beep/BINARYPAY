@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: hakim-global-pay
+    runtime: node
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm run migrate:prod && npm start
+    healthCheckPath: /health
+    envVars:
+      - { key: NODE_ENV, value: production }
+      - { key: DATABASE_URL, sync: false }
+      - { key: APP_URL, sync: false }
+      - { key: JWT_ACCESS_SECRET, generateValue: true }
+      - { key: JWT_REFRESH_SECRET, generateValue: true }
+      - { key: MPESA_CALLBACK_SECRET, generateValue: true }
+      - { key: ENCRYPTION_KEY, generateValue: true }
+      - { key: MPESA_ENVIRONMENT, value: sandbox }
+      - { key: MPESA_CONSUMER_KEY, sync: false }
+      - { key: MPESA_CONSUMER_SECRET, sync: false }
+      - { key: MPESA_SHORTCODE, sync: false }
+      - { key: MPESA_PASSKEY, sync: false }
+      - { key: MPESA_CALLBACK_URL, sync: false }
+      - { key: BANK_NAME, sync: false }
+      - { key: BANK_ACCOUNT_NAME, sync: false }
+      - { key: BANK_ACCOUNT_NUMBER, sync: false }
+      - { key: BANK_CURRENCY, value: KES }
+      - { key: RESEND_API_KEY, sync: false }
+      - { key: MAIL_FROM, sync: false }
