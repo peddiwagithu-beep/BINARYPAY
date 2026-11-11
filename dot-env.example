@@ -1,0 +1,35 @@
+NODE_ENV=development
+PORT=4000
+DATABASE_URL=postgres://user:pass@localhost:5432/hakimglobalpay
+FRONTEND_URL=http://localhost:3000
+JWT_ACCESS_SECRET=
+JWT_REFRESH_SECRET=
+# Phase 1 seed script only
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+# Phase 2 - YOUR Daraja credentials (never commit, never invent)
+MPESA_CONSUMER_KEY=
+MPESA_CONSUMER_SECRET=
+MPESA_SHORTCODE=
+MPESA_PASSKEY=
+MPESA_CALLBACK_URL=
+MPESA_ENVIRONMENT=sandbox
+# Random 32+ char string; becomes part of the callback URL path (openssl rand -hex 24)
+MPESA_CALLBACK_SECRET=
+# MPESA_CALLBACK_URL example: https://YOUR-API-DOMAIN/api/cb  (HTTPS, public, no "mpesa" in the URL)
+# Public URL of this app (used in verification emails), e.g. https://your-service.onrender.com
+APP_URL=
+# Email (Resend). Without these, verification emails are NOT sent.
+RESEND_API_KEY=
+MAIL_FROM=
+# Bank transfer collection (YOUR bank account details; shown to payers)
+BANK_NAME=
+BANK_ACCOUNT_NAME=
+BANK_ACCOUNT_NUMBER=
+BANK_BRANCH=
+BANK_SWIFT=
+BANK_CURRENCY=KES
+# Encrypts webhook signing secrets at rest (any random 32+ char string; keep it stable)
+ENCRYPTION_KEY=
+# Minimum payout amount in major units (optional)
+PAYOUT_MIN=1
